@@ -74,6 +74,10 @@ body {
         border-collapse: collapse;
     }
 
+        .data-table > table tr td:first-child {
+        display: none
+            } 
+
         .data-table > table tr th {
             /* border-bottom:1px solid #656565; */
             color: #3cbcf9;
@@ -124,16 +128,16 @@ body {
             }
 
 
-        .data-table i.sort {
+         .data-table th .sort {
             height: 5px;
             width: 10px;
             margin-left: 5px;
         }
 
-            .data-table i.sort.asc {
+         .data-table th .asc {
                 background-position: 2px -21px;
             }
 
-            .data-table i.sort.desc {
+            .data-table th .desc {
                 background-position: -10px -21px;
             }

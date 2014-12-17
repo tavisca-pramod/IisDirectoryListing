@@ -40,14 +40,6 @@
                 {
                     listing.Sort(DirectoryListingEntry.CompareDatesModifiedReverse);
                 }
-                else if (sortBy.Equals("size"))
-                {
-                    listing.Sort(DirectoryListingEntry.CompareFileSizes);
-                }
-                else if (sortBy.Equals("sizerev"))
-                {
-                    listing.Sort(DirectoryListingEntry.CompareFileSizesReverse);
-                }
                 if (sortBy.Equals("type"))
                 {
                     listing.Sort(DirectoryListingEntryExtension.CompareFileTypes);
@@ -57,6 +49,10 @@
                     listing.Sort(DirectoryListingEntryExtension.CompareFileTypesReverse);
                 }
             }
+            else
+            {
+                listing.Sort(DirectoryListingEntry.CompareFileNames);
+            }
 
             DirectoryListing.DataSource = listing;
             DirectoryListing.DataBind();
@@ -64,7 +60,7 @@
             //
             //  Prepare the file counter label
             //
-            FileCount.Text = listing.Count + " items.";
+            FileCount.Text = listing.Count + " items";
 
 
             // Databind to the navigation list
@@ -131,6 +127,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>Directory contents of <%= Context.Request.Path %></title>
     <link rel="stylesheet" type="text/css" href="/web/content/default.css"/>
+     <script type="text/javascript" src="/web/content/sortable.js"></script>
 </head>
 <body>
     <form id="Form1" runat="server">
@@ -142,17 +139,11 @@
                 <div class="breadcrm">
 
                     <asp:Repeater ID="NavigationListView" runat="server">
-                        <HeaderTemplate>
-                            <ul>
-                        </HeaderTemplate>
                         <ItemTemplate>
                             <li>
                                 <a href="<%#((NavigationEntity)Container.DataItem).PathValue%>"><%#((NavigationEntity)Container.DataItem).DisplayValue%></a>
                             </li>
                         </ItemTemplate>
-                        <FooterTemplate>
-                            <ul />
-                        </FooterTemplate>
                     </asp:Repeater>
 
                 </div>
@@ -168,12 +159,11 @@
             <!--  **************** header Div End ********************** -->
 
             <div class="data-table clearfix">
-                <asp:DataList ID="DirectoryListing" runat="server">
+                <asp:DataList ID="DirectoryListing" runat="server" CssClass="sortable">
                     <HeaderTemplate>
-                        <th style="width: 30%">name<a href="?sortby=name"><i class="sort asc"></i></a><a href="?sortby=namerev"><i class="sort desc"></i></a></th>
-                        <th style="width: 13%">type<a href="?sortby=type"><i class="sort asc"></i></a><a href="?sortby=typerev"><i class="sort desc"></i></a></th>
-                        <th style="width: 13%">size<a href="?sortby=size"><i class="sort asc"></i></a><a href="?sortby=sizerev"> <i class="sort desc"></i></a></th>
-                        <th style="width: 22%">last updated<a href="?sortby=date"><i class="sort asc"></i></a><a href="?sortby=daterev"><i class="sort desc"></i></a></th>
+                        <th style="width: 30%">name<span id="sorttable_sortfwdind"><i class="sort asc"></i></span></th>
+                        <th style="width: 13%">type</th>
+                       <th style="width: 22%">last updated</th>
                     </HeaderTemplate>
                     <ItemTemplate>
                         <td>
@@ -185,9 +175,6 @@
                         </td>
                         <td>
                             <%# GetFileTypeString(((DirectoryListingEntry)Container.DataItem).FileSystemInfo) %>    
-                        </td>
-                        <td>
-                            <%# GetFileSizeString(((DirectoryListingEntry)Container.DataItem).FileSystemInfo) %>    
                         </td>
                         <td>
                             <%# GetFileDateModifiedString(((DirectoryListingEntry)Container.DataItem).FileSystemInfo) %>    
