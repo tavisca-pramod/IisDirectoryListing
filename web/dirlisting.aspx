@@ -116,7 +116,42 @@
     {
         if (info is FileInfo)
         {
-            return info.Extension;
+            string fileExtension = info.Extension.Remove(0,1);
+            
+            switch (fileExtension){
+				case "png": fileExtension = "PNG Image";break; 
+				case "jpg": fileExtension = "JPEG Image"; break;
+				case "jpeg": fileExtension = "JPEG Image"; break;
+				case "svg": fileExtension = "SVG Image"; break;
+				case "gif": fileExtension = "GIF Image"; break;
+				case "ico": fileExtension = "Windows Icon"; break;
+
+				case "txt": fileExtension = "Text File"; break;
+				case "log": fileExtension = "Log File"; break;
+				case "htm": fileExtension = "HTML File"; break;
+				case "html": fileExtension = "HTML File"; break;
+				case "xhtml": fileExtension = "HTML File"; break;
+				case "shtml": fileExtension = "HTML File"; break;
+				
+                case "aspx": fileExtension="ASP Script"; break;
+				case "asp": fileExtension="ASP Script"; break;
+				
+                case "js": fileExtension = "Javascript File"; break;
+				case "css": fileExtension = "Stylesheet"; break;
+
+				case "pdf": fileExtension = "PDF Document"; break;
+				case "xls": fileExtension = "Spreadsheet"; break;
+				case "xlsx": fileExtension = "Spreadsheet"; break;
+				case "doc": fileExtension = "Microsoft Word Document"; break;
+				case "docx": fileExtension = "Microsoft Word Document"; break;
+
+				case "zip": fileExtension = "ZIP Archive"; break;
+				case "htaccess": fileExtension = "Apache Config File"; break;
+				case "exe": fileExtension = "Windows Executable"; break;
+
+				default: if(fileExtension!=""){fileExtension =fileExtension.ToUpper()+" File";} else{fileExtension = "Unknown";} break;
+			}
+            return fileExtension;
         }
         return String.Empty;
     }
