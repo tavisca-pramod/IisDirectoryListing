@@ -113,7 +113,7 @@ body {
             }
 
     .data-table i {
-        background: url(/web/content/image.png) no-repeat;
+       <!-- background: url(/content/image.png) no-repeat;-->
         display: inline-block;
     }
 

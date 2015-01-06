@@ -119,6 +119,7 @@
             string fileExtension = info.Extension.Remove(0,1);
             
             switch (fileExtension){
+                case "svgz": fileExtension = "SVG Image"; break;
 				case "png": fileExtension = "PNG Image";break; 
 				case "jpg": fileExtension = "JPEG Image"; break;
 				case "jpeg": fileExtension = "JPEG Image"; break;
@@ -149,20 +150,168 @@
 				case "htaccess": fileExtension = "Apache Config File"; break;
 				case "exe": fileExtension = "Windows Executable"; break;
 
+
+                case "m4v":
+                case "ogg":
+                case "ogv":
+                case "MOV":
+                case "webm": fileExtension = "Video File"; break;
+
+                case "oga":
+                case "spx": fileExtension = "Audio File"; break;
+
+                case "eot":
+                case "otf":
+                case "ttf":
+                case "woff": fileExtension = "Font File"; break;
+
+
 				default: if(fileExtension!=""){fileExtension =fileExtension.ToUpper()+" File";} else{fileExtension = "Unknown";} break;
 			}
             return fileExtension;
         }
-        return String.Empty;
+        return "Folder";
     }
 
+    String GetTarget(FileSystemInfo info)
+    {
+        if (info is FileInfo)
+        {
+            string fileExtension = info.Extension.Remove(0, 1);
+            
+
+            switch (fileExtension)
+            {
+                case "png": 
+                case "jpg": 
+                case "jpeg":
+                case "svg":
+                case "svgz": 
+                case "gif": 
+                case "ico": 
+
+                case "txt": 
+                case "log": 
+                case "htm": 
+                case "html":
+                case "xhtml": 
+                case "shtml": 
+
+                case "aspx": 
+                case "asp": 
+
+                case "js": 
+                case "css":
+
+                case "pdf":
+                case "xls":
+                case "xlsx":
+                case "doc": 
+                case "docx":
+
+
+                case "m4v":
+                case "ogg":
+                case "ogv":
+                case "webm":
+                case "mov":
+
+                case "oga":
+                case "spx": 
+
+                case "eot":
+                case "otf":
+                case "woff":
+                case "ttf":
+
+                case "zip": 
+                case "htaccess":
+                case "exe": return "_blank";
+                default: return "_self";
+            }
+        }
+
+        return "_self";        
+    }
+
+
+    String GetImageFont(FileSystemInfo info)
+    {
+        if (info is FileInfo)
+        {
+            string fileExtension = info.Extension.Remove(0, 1);
+
+            switch (fileExtension)
+            {
+                case "png":
+                case "jpg":
+                case "jpeg":
+                case "svg":
+                case "svgz":
+                case "gif":
+                case "tiff":
+                case "bmp":
+                case "ico": return "photo-picture";
+
+                case "htm":
+                case "html":
+                case "xhtml":
+                case "shtml": return "html";
+
+                case "aspx":
+                case "asp": return "aspx-1";
+
+                case "js": return "js";
+                case "css": return "css";
+
+                case "txt":
+                case "log":
+                case "pdf":
+                case "xls":
+                case "xlsx":
+                case "ppt":
+                case "pptx":
+                case "doc":
+                case "docx": return "file-2";
+
+                case "avi":
+                case "mp4":
+                case "m4v":
+                case "ogg":
+                case "ogv":
+                case "mov":
+                case "webm": return "video";
+
+                case "oga":
+                case "mp3":
+                case "wav":
+                case "flac":
+                case "spx": return "music";
+
+                case "eot":
+                case "otf":
+                case "ttf":
+                case "woff": return "font";
+
+                case "zip":
+                case "htaccess":
+                case "exe":
+
+                default: return "file-2";
+            }
+        }
+
+        return "folder";
+
+    }
 </script>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>Directory contents of <%= Context.Request.Path %></title>
-    <link rel="stylesheet" type="text/css" href="/web/content/default.css"/>
-     <script type="text/javascript" src="/web/content/sortable.js"></script>
+    <link rel="stylesheet" type="text/css" href="/content/default.css"/>
+    <link rel="stylesheet" type="text/css" href="/content/styles.css"/>
+     <script type="text/javascript" src="/content/sortable.js"></script>
 </head>
 <body>
     <form id="Form1" runat="server">
@@ -202,9 +351,8 @@
                     </HeaderTemplate>
                     <ItemTemplate>
                         <td>
-                            <img alt="icon" width="15"
-                                src="<%=HttpRuntime.AppDomainAppVirtualPath %>/geticon.axd?file=<%# Path.GetExtension(((DirectoryListingEntry)Container.DataItem).Path) %>" />
-                            <a href="<%# ((DirectoryListingEntry)Container.DataItem).VirtualPath  %>">
+                            <i class="i-<%# GetImageFont(((DirectoryListingEntry)Container.DataItem).FileSystemInfo) %>"></i>
+                            <a href="<%# ((DirectoryListingEntry)Container.DataItem).VirtualPath  %>" target="<%# GetTarget(((DirectoryListingEntry)Container.DataItem).FileSystemInfo) %>">
                                 <i class="folder"></i><%# ((DirectoryListingEntry)Container.DataItem).Filename %>
                             </a>
                         </td>
